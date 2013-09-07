@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Breadcrumbs</title>
+	</head>
+	<body>
+
+		<script id="userTemplate" type="text/template">
+		    <ul>
+		        <li><%= username %></li>
+		        <li><%= email %></li>
+		    </ul>
+
+		    <button class="delete">Close Connection</button>
+		</script>
+
+		<script src="js/lib/jquery.min.js"></script>
+        <script src="js/lib/underscore-min.js"></script>
+        <script src="js/lib/backbone-min.js"></script>
+        <script src="js/models/user.js"></script>
+        <script src="js/models/connection.js"></script>
+        <script src="js/collections/following.js"></script>
+        <script src="js/collections/follower.js"></script>
+        <script src="js/views/crumb.js"></script>
+        <script src="js/views/user.js"></script>
+        <script src="js/app.js"></script>
+
+
+	</body>
+</html>
