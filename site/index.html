@@ -14,8 +14,8 @@
 		    <button class="delete">Close Connection</button>
 		</script>
         <script src="js/libs/jquery-1.10.2.min.js"></script>  
-        <script src="js/lib/underscore-min.js"></script>
-        <script src="js/lib/backbone-min.js"></script>
+        <script src="js/libs/underscore-min.js"></script>
+        <script src="js/libs/backbone-min.js"></script>
         <script src="js/models/user.js"></script>
         <script src="js/models/connection.js"></script>
         <script src="js/collections/following.js"></script>
@@ -24,15 +24,35 @@
         <script src="js/views/user.js"></script>
         <script src="js/app.js"></script>
 
- <script type="text/javascript">  
-        alert("heyyy");  
-            jQuery("#btnInit").click(initiate_watchlocation);  
-            jQuery("#btnStop").click(stop_watchlocation);  
-        var watchProcess = null;  
-        function initiate_watchlocation() {  
-        }  
-        function stop_watchlocation() {  
-        }  
+ 
+
+    <button id="btnInit">get location</button>
+    <button id="btnStop">stop location</button>
+    <div id="output">
+
+    </div>
+
+    <script type="text/javascript">  
+
+        $("#btnInit").click(initiate_watchlocation());  
+        $("#btnStop").on("click",stop_watchlocation());  
+
+        var watchProcess = null;
+
+        function initiate_watchlocation() {
+            if (watchProcess == null) {
+                watchProcess = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors);
+            }
+        }
+
+        function stop_watchlocation() {
+            if (watchProcess != null)
+            {
+                navigator.geolocation.clearWatch(watchProcess);
+                watchProcess = null;
+            }
+        }
+
         function handle_errors(error)  
         {  
             switch(error.code)  
@@ -47,9 +67,22 @@
                 break;  
             }  
         }  
-        function handle_geolocation_query(position) {  
-        }  
-    </script>  
 
+        function handle_geolocation_query(position) {  
+            var text = "Latitude: "  + position.coords.latitude  + "<br/>" +  
+                       "Longitude: " + position.coords.longitude + "<br/>" +  
+                       "Accuracy: "  + position.coords.accuracy  + "m<br/>" +  
+                       "Time: " + new Date(position.timestamp);
+            $("#output").empty().append("<p>" + text + "</p>")
+            jQuery("#info").html(text);
+            var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + ',' + position.coords.longitude +  
+                            "&zoom=14&size=300x400&markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;  
+            jQuery("#map").remove();
+            jQuery(document.body).append(  
+                jQuery(document.createElement("img")).attr("src", image_url).attr('id','map')
+            );
+        }
+
+    </script>  
 	</body>
 </html>
