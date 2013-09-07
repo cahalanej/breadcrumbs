@@ -7,7 +7,23 @@ var express = require('express')
   , io = require('socket.io').listen(server)
   , twilio = require('twilio' ); //Load the twilio module
 
-// Create a new REST API client to make authenticated requests against the
+
+server.listen(8080);
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+app.use('/libs', express.static(__dirname + '/libs'));
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
+Create a new REST API client to make authenticated requests against the
 // twilio back end
 var accountSid = 'AC71b7fa31feefaf648cda86b85d68fe2d'
 var authToken = "{{ c6195524b11918be9586a42d407b605f }}"
@@ -37,19 +53,4 @@ console.log(message.dateCreated);
 else {
     console.log('Oops! There was an error.');
 }
-});
-
-server.listen(8080);
-
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
-});
-
-app.use('/libs', express.static(__dirname + '/libs'));
-
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
 });
