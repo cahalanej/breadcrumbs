@@ -5,25 +5,37 @@
 	</head>
 	<body>
 
-    <button id="btn-init">get location</button>
-    <button id="btn-stop">stop location</button>
-    <div id="output">
+     <div id="header">
+            <button id="nav-drop">---</button>
+            <p id="brand">
+                BreadCrumb
+            </p>
+        </div>
 
+    <div id="content">
+        <!--<button id="btn-init">get location</button>
+        <button id="btn-stop">stop location</button>-->
+        <div id="output">
+
+        </div>
+
+        <form action="/textmsg" method="post">
+            <input type="text" name="phone">
+            <input type="hidden" name="uid">
+            <input type="submit" value="submit">
+        </form>
     </div>
-
-    <form action="/textmsg" method="post">
-        <input type="text" name="phone">
-        <input type="hidden" name="uid">
-        <input type="submit" value="submit">
-    </form>
 
     
     <script src="libs/jquery-1.10.2.min.js"></script>  
     <script src="/socket.io/lib/socket.io.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="libs/global.css">
+
     <script>
       var socket = io.connect('http://localhost');
       var uid;
+      this.initiate_watchlocation();
       socket.on('news', function (data) {
         uid = document.querySelector('[name=uid]').value = data.uid;
         console.log(data);
@@ -41,8 +53,8 @@
         });
     });
 
-    $("#btn-init").click(function(){initiate_watchlocation()});  
-    $("#btn-stop").click(function(){stop_watchlocation()});  
+   // $("#btn-init").click(function(){initiate_watchlocation()});  
+    //$("#btn-stop").click(function(){stop_watchlocation()});  
 
     var watchProcess = null;
 
@@ -81,12 +93,12 @@
                    "Accuracy: "  + position.coords.accuracy  + "m<br/>" +  
                    "Time: " + new Date(position.timestamp);
         $("#output").empty().append("<p>" + text + "</p>")
-        var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + ',' + position.coords.longitude +  
+       /* var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + ',' + position.coords.longitude +  
                         "&zoom=14&size=300x400&markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;  
         jQuery("#map").remove();
         jQuery(document.body).append(  
             jQuery(document.createElement("img")).attr("src", image_url).attr('id','map')
-        );
+        );*/
         socket.emit('location_from_sender', { lat: position.coords.latitude, lon: position.coords.longitude });
     }
 
