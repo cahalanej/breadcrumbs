@@ -74,7 +74,7 @@
             jQuery(document.body).append(  
                 jQuery(document.createElement("img")).attr("src", image_url).attr('id','map')
             );
-            socket.emit('location', { lat: position.coords.latitude, lon: position.coords.longitude });
+            socket.emit('location_from_receiver', { lat: position.coords.latitude, lon: position.coords.longitude });
         }
 
     </script>  

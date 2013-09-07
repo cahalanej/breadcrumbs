@@ -8,6 +8,12 @@ var express = require('express')
   , io = require('socket.io').listen(server)
   , twilio = require('twilio'); 
 
+// required for heroku
+// io.configure(function () { 
+//   io.set("transports", ["xhr-polling"]); 
+//   io.set("polling duration", 10); 
+// });
+
 var accountSid = 'AC71b7fa31feefaf648cda86b85d68fe2d';
 var authToken = 'c6195524b11918be9586a42d407b605f';
 var client = new twilio.RestClient(accountSid, authToken);
@@ -24,21 +30,12 @@ app.post('/textmsg', function(req, res) {
     console.log(phonenumber);
 
 
-    // Pass in parameters to the REST API using an object literal notation. The
-    // REST client will handle authentication and response serialzation for you.
     client.sms.messages.create({
         to:'+1' + phonenumber,
         from:'+16035383594',
         body:'follow the crumbs: http://crumb.herokuapp.com/track/' + uid
     }, function(error, message) {
-    // The HTTP request to Twilio will run asynchronously. This callback
-    // function will be called when a response is received from Twilio
-    // The "error" variable will contain error information, if any.
-    // If the request was successful, this value will be "falsy"
         if (!error) {
-    // The second argument to the callback will contain the information
-    // sent back by Twilio for the request. In this case, it is the
-    // information about the text messsage you just sent:
             console.log('Success! The SID for this SMS message is:');
             console.log(message.sid);
 
@@ -61,6 +58,7 @@ app.get('/track/:uid', function (req, res) {
     uid = uid.replace(/</g, '');
     uid = uid.replace(/>/g, '');
     uid = uid.replace(/&/g, '');
+    console.log(uid);
     fs.readFile(__dirname + '/track.html', function(err, data) {
         res.send((data + '').replace("theirs", uid));
     });
@@ -75,20 +73,21 @@ io.sockets.on('connection', function (socket) {
     var datatimeout;
     var listentimeout;
     socket.emit('news', { 'uid': uid });
-    socket.on('location', function (data) {
-        console.log('location: ' + data);
+    socket.on('location_from_sender', function (data) {
+        console.log('sender location: ' + JSON.stringify(data));
         datastore[uid] = data;
 
         clearTimeout(datatimeout);
         datatimeout = setTimeout(function() {
+            console.log('cleaning up ' + uid);
             if (uid in datastore) {
                 delete datastore[uid];
             }
-        }, 3600);
+        }, 3600 * 1000);
     });
     socket.on('listen', function (their_uid) {
         console.log('listen: ' + their_uid);
-        setInterval(function() {
+        listentimeout = setInterval(function() {
             socket.emit('location', datastore[their_uid])
         }, 10000);
     });
@@ -98,9 +97,4 @@ io.sockets.on('connection', function (socket) {
     });
 
 });
-
-
-// Create a new REST API client to make authenticated requests against the
-// twilio back end
-
 
