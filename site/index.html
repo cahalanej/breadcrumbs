@@ -26,16 +26,16 @@
 
  
 
-    <button id="btnInit">get location</button>
-    <button id="btnStop">stop location</button>
+    <button id="btn-init">get location</button>
+    <button id="btn-stop">stop location</button>
     <div id="output">
 
     </div>
 
     <script type="text/javascript">  
 
-        $("#btnInit").click(initiate_watchlocation());  
-        $("#btnStop").on("click",stop_watchlocation());  
+        $("#btn-init").click(function(){initiate_watchlocation()});  
+        $("#btn-stop").click(function(){stop_watchlocation()});  
 
         var watchProcess = null;
 
