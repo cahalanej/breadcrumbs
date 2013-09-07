@@ -17,6 +17,8 @@
       var socket = io.connect('http://localhost');
       var uid;
       var their_uid = 'theirs';
+      var latSender;
+      var lngSender;
       socket.on('news', function (data) {
         uid = data.uid;
         console.log(data);
@@ -24,8 +26,9 @@
       });
       socket.on('location', function(data) {
         console.log('GOT LOCATION!', JSON.stringify(data));
-        $("#output").empty().append("<p>" + JSON.stringify(data) + "</p>")
-      });
+        latSender = data.lat;
+        lngSender = data.lon;
+        $("#output").append("<p> sender's lat: " + latSender + "<br>sender's long: " + lngSender + "</p>")});
 
         $("#btn-init").click(function(){initiate_watchlocation()});  
         $("#btn-stop").click(function(){stop_watchlocation()});  
@@ -61,13 +64,14 @@
             }  
         }  
 
-        function handle_geolocation_query(position) {  
-            var text = "Latitude: "  + position.coords.latitude  + "<br/>" +  
-                       "Longitude: " + position.coords.longitude + "<br/>" +  
+        function handle_geolocation_query(position) {
+            var thisLat = position.coords.latitude;
+            var thisLng = position.coords.longitude;
+            var text = "Latitude: "  + thisLat  + "<br/>" +  
+                       "Longitude: " + thisLng + "<br/>" +  
                        "Accuracy: "  + position.coords.accuracy  + "m<br/>" +  
                        "Time: " + new Date(position.timestamp);
-            $("#output").empty().append("<p>" + text + "</p>")
-            jQuery("#info").html(text);
+            $("#output").empty().append("<p>" + text + "</p>");
             var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + ',' + position.coords.longitude +  
                             "&zoom=14&size=300x400&markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;  
             jQuery("#map").remove();
@@ -75,7 +79,37 @@
                 jQuery(document.createElement("img")).attr("src", image_url).attr('id','map')
             );
             socket.emit('location_from_receiver', { lat: position.coords.latitude, lon: position.coords.longitude });
+        
+            Number.prototype.toRad = function() {
+               return this * Math.PI / 180;
+            }
+            Number.prototype.toDeg = function() {
+               return this * 180 / Math.PI;
+            }
+            var lat1 = thisLat; // this user's
+            var lng1 = thisLng; // this user's
+            var lat2 = latSender;
+            console.log("lat2:"+lat2);
+            var lng2 = lngSender;
+            var dLon = (lng2-lng1).toRad();
+            var y = Math.sin(dLon) * Math.cos(lat2);
+            var x = Math.cos(lat1)*Math.sin(lat2) -
+                    Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
+            var brng = Math.atan2(y, x).toDeg();
+            var R = 6378; // km
+            var dLat = (lat2-lat1).toRad();
+            var lat1 = lat1.toRad();
+            var lat2 = lat2.toRad();
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+            var d = R * c; // in kilometers
+            console.log(d);
+            console.log(brng);
         }
+
+
+
 
     </script>  
 	</body>
