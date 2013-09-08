@@ -23,7 +23,7 @@
         background-color: #CCC;
         border-style: solid;
         border-width: 1px;
-        border-radius: 62.5px;
+        border-radius: 250px;
         padding: 2px;
         position: absolute;
         z-index: 2;
@@ -71,6 +71,10 @@
 
     <link rel="stylesheet" type="text/css" href="/libs/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/libs/global.css">
+
+
+    <script src="/libs/jquery-1.10.2.min.js"></script>  
+    <script src="/socket.io/lib/socket.io.js"></script>
      <div id="header">
             <!--<button id="nav-drop">---</button>-->
             <p id="brand">
@@ -78,6 +82,7 @@
             </p>
       </div>
 
+     
       <div id="content">
         <button id="btn-init" class="btn btn-huge">Start the Trail!</button>
         <button id="btn-stop" class="btn btn-huge hide">Stop Following</button>
@@ -96,9 +101,8 @@
           </div>
         </div>
       </div>
+      
 
-    <script src="/libs/jquery-1.10.2.min.js"></script>  
-    <script src="/socket.io/lib/socket.io.js"></script>
 
     <script>
         Number.prototype.toRad = function() {
@@ -203,7 +207,7 @@
       ], function(Color, dom, domGeom, has, on, parser, ready, win, Point, Graphic, Map, SimpleLineSymbol, SimpleMarkerSymbol) {
 
         var map;
-        var COMPASS_SIZE = 125;
+        var COMPASS_SIZE = 500;
         var pt;
         var graphic;
         var currLocation;
@@ -522,10 +526,13 @@
 
 
     </script>  
-      <article id="compassHousing" class="hide">
+
+
+ <article id="compassHousing" class="hide" style="position:relative; margin-left: auto; margin-right: auto;">
         <canvas id="compassFace"></canvas>
         <canvas id="compassNeedle"></canvas>
       </article>
+
 
       <script type="text/javascript">
     dynamicSize();
@@ -538,6 +545,10 @@
       $("#nav-drop").width(buttonWid);
 
       $("#content").css("top", navHeight + "px");
+      var contentTop = $("#content").offset().top;
+      var contentHeight = $("#content").height();
+
+      $("#compassHousing").css("top", contentTop+contentHeight + 30 +"px");
 
       $("#brand").css("font-size",((3*navHeight)/4) +"px");
       $("#brand").css("padding", ((3*navHeight)/8)+"px");
