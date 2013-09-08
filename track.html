@@ -89,11 +89,19 @@
     <script src="/libs/jquery-1.10.2.min.js"></script>  
     <script src="/socket.io/lib/socket.io.js"></script>
     <script>
-      var socket = io.connect('http://localhost');
+        Number.prototype.toRad = function() {
+           return this * Math.PI / 180;
+        }
+        Number.prototype.toDeg = function() {
+           return this * 180 / Math.PI;
+        }
+      var socket = io.connect(window.location.hostname);
       var uid;
       var their_uid = 'theirs';
-      var latSender;
-      var lngSender;
+        var lat1;
+        var lat2;
+        var lng1;
+        var lng2;
       socket.on('news', function (data) {
         uid = data.uid;
         console.log(data);
@@ -101,9 +109,9 @@
       });
       socket.on('location', function(data) {
         console.log('GOT LOCATION!', JSON.stringify(data));
-        latSender = data.lat;
-        lngSender = data.lon;
-        $("#output").empty().append("<p> sender's lat: " + latSender + "<br>sender's long: " + lngSender + "</p>")});
+        lat2 = data.lat.toRad();
+        lng2 = data.lon.toRad();
+        $("#output").empty().append("<p> sender's lat: " + lat2 + "<br>sender's long: " + lng2 + "</p>")});
 
         $("#btn-init").click(function(){initiate_watchlocation()});  
         $("#btn-stop").click(function(){stop_watchlocation()});  
@@ -112,7 +120,7 @@
 
         function initiate_watchlocation() {
             if (watchProcess == null) {
-                watchProcess = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors);
+                watchProcess = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors, {enableHighAccuracy:true});
             }
         }
 
@@ -139,16 +147,7 @@
             }  
         }  
 
-        var lat1;
-        var lat2;
-        var lng1;
-        var lng2;
-        Number.prototype.toRad = function() {
-           return this * Math.PI / 180;
-        }
-        Number.prototype.toDeg = function() {
-           return this * 180 / Math.PI;
-        }
+
 
         function handle_geolocation_query(position) {
             var thisLat = position.coords.latitude;
@@ -169,9 +168,9 @@
 
             lat1 = thisLat.toRad(); // this user's
             lng1 = thisLng.toRad(); // this user's
-            lat2 = (39.952045).toRad(); // latSender;
-            console.log("lat1:"+lat1+",lat2:"+lat2);
-            lng2 = (-75.189421).toRad(); // lngSender;
+            // lat2 = lat2.toRad(); // latSender; 39.952045
+            // console.log("lat2:"+latSender+",lng2:"+lngSender);
+            // lng2 = lng2.toRad(); // lngSender; 75.189421
 
         }
 
@@ -455,7 +454,7 @@
             var angle = brng + updatedAngle;
             $("#angle").append("<p>" + brng + ", " + updatedAngle + "</p>");
             $("#angle").append("<p>" + angle + "</p>");
-            $("#distance").empty().append("<p>" + d + " km </p>");
+            $("#distance").empty().append("<p>" + d*1000 + " meters away</p>");
           
            dom.byId("compassNeedle").style.webkitTransform = "rotate(" + angle + "deg)";
 

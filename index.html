@@ -20,6 +20,7 @@
         </div>
 
         <form action="/textmsg" method="post">
+            <input type="text" name="senderName">
             <input type="text" name="phone">
             <input type="hidden" name="uid">
             <input type="submit" value="submit">
@@ -33,15 +34,17 @@
     <link rel="stylesheet" type="text/css" href="libs/global.css">
 
     <script>
-      var socket = io.connect('http://localhost');
+    var hostname = window.location.hostname;
+      var socket = io.connect(hostname);
+      // socket.emit('hostname_to_server', {name: hostname});
       var uid;
-      this.initiate_watchlocation();
       socket.on('news', function (data) {
         uid = document.querySelector('[name=uid]').value = data.uid;
         console.log(data);
       });
 
     $(document.body).on('submit', 'form', function(e) {
+        initiate_watchlocation();
         e.preventDefault();
         var $this = $(this);
         $this.hide();
@@ -60,7 +63,7 @@
 
     function initiate_watchlocation() {
         if (watchProcess == null) {
-            watchProcess = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors);
+            watchProcess = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors, {enableHighAccuracy:true});
         }
     }
 
