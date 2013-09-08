@@ -20,17 +20,17 @@
       #compassHousing {
         margin-left: 5px;
         margin-top: 5px;
-        background-color: #CCC;
+        /*background-color: #CCC;
         border-style: solid;
         border-width: 1px;
-        border-radius: 250px;
+        border-radius: 250px;*/
         padding: 2px;
         position: absolute;
         z-index: 2;
         opacity: 0.77;
-        -moz-box-shadow: 2px 3px 10px 2px #333;
+       /* -moz-box-shadow: 2px 3px 10px 2px #333;
         -webkit-box-shadow: 2px 3px 10px 2px #333;
-        box-shadow: 2px 3px 10px 2px #333;
+        box-shadow: 2px 3px 10px 2px #333;*/
       }
       #compassFace {
         z-index: -1;
@@ -275,7 +275,7 @@
           compassFaceContext.clearRect(0, 0, compassFaceCanvas.width, compassFaceCanvas.height);
 
           // draw the tick marks and center the compass ring
-          var xOffset = yOffset = compassFaceCanvas.width / 2;
+          /*var xOffset = yOffset = compassFaceCanvas.width / 2;
           for (var i = 0; i < 360; ++i) {
             var x = (compassFaceRadius * Math.cos(degToRad(i))) + xOffset;
             var y = (compassFaceRadius * Math.sin(degToRad(i))) + yOffset;
@@ -287,7 +287,7 @@
             compassFaceContext.closePath();
             compassFaceContext.stroke();
             i = i + 4;
-          }
+          }*/
 
           // The measureText method returns an object, with one attribute: width.
           // The width attribute returns the width of the text, in pixels.
@@ -373,16 +373,16 @@
           compassNeedleContext.fillText("N", 0, - (compassFaceRadius - 20)); */
           // needle
           compassNeedleContext.beginPath();
-          compassNeedleContext.fillStyle = "#000";
+          compassNeedleContext.fillStyle = "#8cd9ff";
           compassNeedleContext.moveTo(0, 0);
-          compassNeedleContext.lineTo(0, (needleLength / 4) * -1);
-          compassNeedleContext.lineTo((needleWidth / 4) * -1, 0);
+          compassNeedleContext.lineTo(0, (needleLength / 2 ) * -1);
+          compassNeedleContext.lineTo((needleWidth *2) * -1, 0);
           compassNeedleContext.fill();
           compassNeedleContext.beginPath();
-          compassNeedleContext.fillStyle = "#000";
+          compassNeedleContext.fillStyle = "#8cd9ff";
           compassNeedleContext.moveTo(0, 0);
-          compassNeedleContext.lineTo(0, (needleLength / 4) * -1);
-          compassNeedleContext.lineTo(needleWidth / 4, 0);
+          compassNeedleContext.lineTo(0, (needleLength / 2) * -1);
+          compassNeedleContext.lineTo(needleWidth *2, 0);
           compassNeedleContext.fill();
 
           // center pin color
@@ -396,7 +396,7 @@
 
           compassNeedleContext.beginPath();
           compassNeedleContext.moveTo(0, 0);
-          compassNeedleContext.arc(0, 0, (needleWidth / 4), 0, degToRad(360), false);
+          compassNeedleContext.arc(0, 0, (needleWidth / 3), 0, degToRad(360), false);
           compassNeedleContext.fillStyle = "#000";
           compassNeedleContext.fill();
         }
