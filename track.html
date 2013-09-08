@@ -455,6 +455,7 @@
             var x = dLon/360*40075000*cos((lat1/2+lat2/2).toRad());
             var y = dLat/360*40075000;
             var angle = Math.atan2(y,x).toDeg();
+            angle = -angle+90;
             var d = Math.sqrt(x*x+y*y);
             // $("#angle").append("<p>updatedAngle: " + updatedAngle + "</p>");
             $("#angle").append("<p>angle: " + angle + "</p>");
