@@ -9,10 +9,10 @@ var express = require('express')
   , twilio = require('twilio'); 
 
 // required for heroku
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
+// io.configure(function () { 
+//   io.set("transports", ["xhr-polling"]); 
+//   io.set("polling duration", 10); 
+// });
 
 var accountSid = 'AC71b7fa31feefaf648cda86b85d68fe2d';
 var authToken = 'c6195524b11918be9586a42d407b605f';
