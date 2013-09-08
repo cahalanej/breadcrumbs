@@ -24,29 +24,7 @@ var datastore = {};
 // phone number to send to
 app.use(express.bodyParser());
 
-app.post('/textmsg', function(req, res) {
-    var phonenumber= req.body.phone;
-    var uid = req.body.uid;
-    console.log(phonenumber);
 
-
-    client.sms.messages.create({
-        to:'+1' + phonenumber,
-        from:'+16035383594',
-        body:'follow the crumbs: http://crumb.herokuapp.com/track/' + uid
-    }, function(error, message) {
-        if (!error) {
-            console.log('Success! The SID for this SMS message is:');
-            console.log(message.sid);
-
-            console.log('Message sent on:');
-            console.log(message.dateCreated);
-        }
-    else {
-        console.log('Oops! There was an error.');
-    }
-});
-});
 
 
 app.get('/', function (req, res) {
@@ -73,6 +51,13 @@ io.sockets.on('connection', function (socket) {
     var datatimeout;
     var listentimeout;
     socket.emit('news', { 'uid': uid });
+
+    var hostname;
+
+    // socket.on('hostname_to_server', function (data) {
+    //     hostname = data.name;
+    // });
+
     socket.on('location_from_sender', function (data) {
         console.log('sender location: ' + JSON.stringify(data));
         datastore[uid] = data;
@@ -94,6 +79,31 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('disconnect', function() {
         clearInterval(listentimeout);
+    });
+
+    app.post('/textmsg', function(req, res) {
+        var phonenumber = req.body.phone;
+        var senderName = req.body.senderName
+        var uid = req.body.uid;
+        console.log(phonenumber);
+
+
+        client.sms.messages.create({
+            to:'+1' + phonenumber,
+            from:'+16035383594',
+            body:'follow ' + senderName + '\'s crumbs: http://158.130.108.53:8080/track/' + uid
+        }, function(error, message) {
+            if (!error) {
+                console.log('Success! The SID for this SMS message is:');
+                console.log(message.sid);
+
+                console.log('Message sent on:');
+                console.log(message.dateCreated);
+            }
+        else {
+            console.log('Oops! There was an error.');
+        }
+    });
     });
 
 });
