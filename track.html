@@ -83,6 +83,9 @@
     <div id="angle">
     </div>
 
+    <div id="accuracy">
+    </div>
+
     <div id="distance">
     </div>
 
@@ -109,9 +112,9 @@
       });
       socket.on('location', function(data) {
         console.log('GOT LOCATION!', JSON.stringify(data));
-        lat2 = data.lat.toRad();
-        lng2 = data.lon.toRad();
-        $("#output").empty().append("<p> sender's lat: " + lat2 + "<br>sender's long: " + lng2 + "</p>")});
+        lat2 = data.lat.toRad(); //(39.952244).toRad();
+        lng2 = data.lon.toRad(); //data.lon.toRad();
+        $("#output").empty().append("<p> sender's lat: " + lat2.toDeg() + "<br>sender's long: " + lng2.toDeg() + "</p>")});
 
         $("#btn-init").click(function(){initiate_watchlocation()});  
         $("#btn-stop").click(function(){stop_watchlocation()});  
@@ -156,7 +159,7 @@
                        "Longitude: " + thisLng + "<br/>" +  
                        "Accuracy: "  + position.coords.accuracy  + "m<br/>" +  
                        "Time: " + new Date(position.timestamp);
-            $("#output").empty().append("<p>" + text + "</p>");
+            $("#accuracy").empty().append("<p>" + text + "</p>");
             // var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + ',' + position.coords.longitude +  
             //                 "&zoom=14&size=300x400&markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;  
             // jQuery("#map").remove();
@@ -441,22 +444,30 @@
             // angle calculation
             var dLon = (lng2-lng1);
             $("#angle").empty().append("<p>lat1,lat2,lng1,lng2: " + lat1 + ", " +lat2 +", " + lng1 +", "+ lng2 + "</p>");  
-            var y = Math.sin(dLon) * Math.cos(lat2);
-            var x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
-            var brng = (Math.atan2(y, x).toDeg()+360)%360;
-            $("#angle").append("<p>bearing: " + brng + ", x,y: " + x+","+y + "</p>");
-            var R = 6378; // km
             var dLat = (lat2-lat1);
-            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-            var d = R * c; // in kilometers
-            var angle = brng + updatedAngle;
-            $("#angle").append("<p>" + brng + ", " + updatedAngle + "</p>");
-            $("#angle").append("<p>" + angle + "</p>");
-            $("#distance").empty().append("<p>" + d*1000 + " meters away</p>");
+            // var y = Math.sin(dLon) * Math.cos(lat2);
+            // var x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
+            // var brng = (Math.atan2(y, x).toDeg()+360)%360;
+            // $("#angle").append("<p>bearing: " + brng + ", x,y: " + x+","+y + "</p>");
+            // var R = 6378; // km
+            // var dLat = (lat2-lat1);
+            // var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            //         Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+            // var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+            // var d = R * c; // in kilometers
+            // var angle = brng + updatedAngle;
+
+            // COUNTS FROM east CCW, east = 0
+            var x = dLon/360*40075000*Math.cos(lat1/2+lat2/2);
+            var y = dLat/360*40075000;
+            var angle = Math.atan2(y,x).toDeg();
+            var angle2 = updatedAngle-angle+90;
+            var d = Math.sqrt(x*x+y*y);
+            // $("#angle").append("<p>updatedAngle: " + updatedAngle + "</p>");
+            $("#angle").append("<p>angle: " + angle2 + "</p>");
+            $("#distance").empty().append("<p>" + d + " meters away</p>");
           
-           dom.byId("compassNeedle").style.webkitTransform = "rotate(" + angle + "deg)";
+           dom.byId("compassNeedle").style.webkitTransform = "rotate(" + angle2 + "deg)";
 
        }
 
