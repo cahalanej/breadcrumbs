@@ -91,7 +91,7 @@ io.sockets.on('connection', function (socket) {
         client.sms.messages.create({
             to:'+1' + phonenumber,
             from:'+16035383594',
-            body:'follow ' + senderName + '\'s crumbs: http://158.130.108.53:8080/track/' + uid
+            body:'follow ' + senderName + '\'s crumbs: http://68.180.103.143:8080/track/' + uid
         }, function(error, message) {
             if (!error) {
                 console.log('Success! The SID for this SMS message is:');

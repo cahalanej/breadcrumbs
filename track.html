@@ -106,9 +106,9 @@
       });
       socket.on('location', function(data) {
         console.log('GOT LOCATION!', JSON.stringify(data));
-        lat2 = data.lat.toRad();
-        lng2 = data.lon.toRad();
-        $("#output").empty().append("<p> sender's lat: " + lat2 + "<br>sender's long: " + lng2 + "</p>")});
+        lat2 = data.lat.toRad(); //(39.952244).toRad();
+        lng2 = data.lon.toRad(); //data.lon.toRad();
+        $("#output").empty().append("<p> sender's lat: " + lat2.toDeg() + "<br>sender's long: " + lng2.toDeg() + "</p>")});
 
         $("#btn-init").click(function(){initiate_watchlocation()});  
         $("#btn-stop").click(function(){stop_watchlocation()});  
@@ -452,16 +452,16 @@
             // var angle = brng + updatedAngle;
 
             // COUNTS FROM east CCW, east = 0
-            var x = dLon/360*40075000*cos((lat1/2+lat2/2).toRad());
+            var x = dLon/360*40075000*Math.cos(lat1/2+lat2/2);
             var y = dLat/360*40075000;
             var angle = Math.atan2(y,x).toDeg();
-            angle = -angle+90;
+            var angle2 = updatedAngle-angle+90;
             var d = Math.sqrt(x*x+y*y);
             // $("#angle").append("<p>updatedAngle: " + updatedAngle + "</p>");
-            $("#angle").append("<p>angle: " + angle + "</p>");
+            $("#angle").append("<p>angle: " + angle2 + "</p>");
             $("#distance").empty().append("<p>" + d + " meters away</p>");
           
-           dom.byId("compassNeedle").style.webkitTransform = "rotate(" + angle + "deg)";
+           dom.byId("compassNeedle").style.webkitTransform = "rotate(" + angle2 + "deg)";
 
        }
 
