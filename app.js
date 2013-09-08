@@ -74,7 +74,7 @@ io.sockets.on('connection', function (socket) {
         console.log('listen: ' + their_uid);
         listentimeout = setInterval(function() {
             socket.emit('location', datastore[their_uid])
-        }, 10000);
+        }, 1000);
     });
 
     socket.on('disconnect', function() {
@@ -91,7 +91,7 @@ io.sockets.on('connection', function (socket) {
         client.sms.messages.create({
             to:'+1' + phonenumber,
             from:'+16035383594',
-            body:'follow ' + senderName + '\'s crumbs: http://68.180.103.143:8080/track/' + uid
+            body:'follow ' + senderName + '\'s crumbs: http://158.130.108.53:8080/track/' + uid
         }, function(error, message) {
             if (!error) {
                 console.log('Success! The SID for this SMS message is:');
