@@ -83,10 +83,10 @@
         <button id="btn-stop" class="btn btn-huge hide">Stop Following</button>
         
         <div id="information" class="hide">
-          <div id="output">
+          <div id="output" class="hide">
           </div>
 
-          <div id="angle">
+          <div id="angle" class="hide">
           </div>
 
           <div id="accuracy">
@@ -164,10 +164,9 @@
         function handle_geolocation_query(position) {
             var thisLat = position.coords.latitude;
             var thisLng = position.coords.longitude;
-            var text = "Latitude: "  + thisLat  + "<br/>" +  
-                       "Longitude: " + thisLng + "<br/>" +  
-                       "Accuracy: "  + position.coords.accuracy  + "m<br/>" +  
-                       "Time: " + new Date(position.timestamp);
+            //"Latitude: "  + thisLat  + "<br/>" +  
+                      // "Longitude: " + thisLng + "<br/>" +  "Time: " + new Date(position.timestamp);
+            var text = "Accuracy: "  + position.coords.accuracy  + "m<br/>" +  
             $("#accuracy").empty().append("<p>" + text + "</p>");
             // var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + ',' + position.coords.longitude +  
             //                 "&zoom=14&size=300x400&markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;  
@@ -288,13 +287,13 @@
 
           // The measureText method returns an object, with one attribute: width.
           // The width attribute returns the width of the text, in pixels.
-          compassFaceContext.font = "10px Arial";
+         /* compassFaceContext.font = "10px Arial";
           compassFaceContext.textAlign = "center";
           var metrics = compassFaceContext.measureText('N');
           compassFaceContext.fillText('N', compassFaceRadius, 15);
           compassFaceContext.fillText('S', compassFaceRadius, compassFaceDiameter - 10);
           compassFaceContext.fillText('E', (compassFaceRadius + (compassFaceRadius - metrics.width)), compassFaceRadius);
-          compassFaceContext.fillText('W', 10, compassFaceRadius);
+          compassFaceContext.fillText('W', 10, compassFaceRadius);*/
         }
 
         // Draw the compass needle
@@ -312,7 +311,7 @@
           // drawing new shapes.
 
           // SOUTH
-          compassNeedleContext.beginPath();
+         /* compassNeedleContext.beginPath();
           compassNeedleContext.lineWidth = 1;
           compassNeedleContext.moveTo(0, 5);
           compassNeedleContext.lineTo(0, compassFaceRadius);
@@ -345,10 +344,10 @@
           compassNeedleContext.lineTo(0, needleLength / 4);
           compassNeedleContext.lineTo(needleWidth / 4, 0);
           compassNeedleContext.fill();
-
+*/
 
           // NORTH
-          compassNeedleContext.beginPath();
+         /*compassNeedleContext.beginPath();
           compassNeedleContext.lineWidth = 1;
           compassNeedleContext.moveTo(0, 0);
           compassNeedleContext.lineTo(0, - compassFaceRadius);
@@ -367,7 +366,7 @@
           compassNeedleContext.font = "normal 10px Verdana";
           compassNeedleContext.fillStyle = "#000";
           compassNeedleContext.textAlign = "center";
-          compassNeedleContext.fillText("N", 0, - (compassFaceRadius - 20));
+          compassNeedleContext.fillText("N", 0, - (compassFaceRadius - 20)); */
           // needle
           compassNeedleContext.beginPath();
           compassNeedleContext.fillStyle = "#000";
