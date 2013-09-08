@@ -2,17 +2,19 @@
 <html lang="en">
 	<head>
 		<title>Breadcrumbs</title>
-        
-    <link rel="stylesheet" type="text/css" href="libs/global.css">
+
 	</head>
 	<body>
 
+
+    <link rel="stylesheet" type="text/css" href="/libs/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="libs/global.css">
      <div id="header">
-            <button id="nav-drop">---</button>
+            <!--<button id="nav-drop">---</button>-->
             <p id="brand">
-                BreadCrumb
+                <a id="brand-link" href="/">BreadCrumbs</a>
             </p>
-        </div>
+      </div>
 
     <div id="content">
         <!--<button id="btn-init">get location</button>
@@ -22,10 +24,13 @@
         </div>
 
         <form action="/textmsg" method="post">
-            <input type="text" name="senderName">
-            <input type="text" name="phone">
+            <input type="text" name="senderName" class="input-form" placeholder="Your Name">
+            </br>
+            <input type="text" name="phone" class="input-form" placeholder="Your Friend's Number">
+            </br>
             <input type="hidden" name="uid">
-            <input type="submit" value="submit">
+            </br>
+            <input class="btn btn-huge" type="submit" value="Leave a Trail!" id="submit-btn">
         </form>
     </div>
 
@@ -106,6 +111,41 @@
         socket.emit('location_from_sender', { lat: position.coords.latitude, lon: position.coords.longitude });
     }
 
-    </script>  
+    </script> 
+
+
+    <script type="text/javascript">
+    dynamicSize();
+    
+    //Dynamic Sizing
+    function dynamicSize(){
+      var deviceWid = $(window).width();
+      var buttonWid = $("#nav-drop").height();
+      var navHeight = $("#header").height();
+      $("#nav-drop").width(buttonWid);
+
+      $("#content").css("top", navHeight + "px");
+
+      $("#brand").css("font-size",((3*navHeight)/4) +"px");
+      $("#brand").css("padding", ((3*navHeight)/8)+"px");
+    }
+
+    /*$("#btn-init").click(function(){
+      $("#btn-init").addClass("hide");
+      $("#btn-stop").removeClass("hide");
+      $("#information").removeClass("hide");
+      $("#compassHousing").removeClass("hide");
+    })
+
+    $("#btn-stop").click(function(){
+      $("#content").html("<h2>You've lost the trail!</h2></br><p>Get a new link to help you find it again.</p>");
+      $("#compassHousing").addClass("hide");
+    })*/
+
+
+    </script>
+
+
+
 	</body>
 </html>

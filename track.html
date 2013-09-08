@@ -69,28 +69,37 @@
 	</head>
 	<body>
 
+    <link rel="stylesheet" type="text/css" href="/libs/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/libs/global.css">
      <div id="header">
-            <button id="nav-drop">---</button>
+            <!--<button id="nav-drop">---</button>-->
             <p id="brand">
-                BreadCrumb
+                <a id="brand-link" href="/">BreadCrumbs</a>
             </p>
-</div>
-    <button id="btn-init">get location</button>
-    <button id="btn-stop">stop location</button>
-    <div id="output">
-    </div>
+      </div>
 
-    <div id="angle">
-    </div>
+      <div id="content">
+        <button id="btn-init" class="btn btn-huge">Start the Trail!</button>
+        <button id="btn-stop" class="btn btn-huge hide">Stop Following</button>
+        
+        <div id="information" class="hide">
+          <div id="output">
+          </div>
 
-    <div id="accuracy">
-    </div>
+          <div id="angle">
+          </div>
 
-    <div id="distance">
-    </div>
+          <div id="accuracy">
+          </div>
+
+          <div id="distance">
+          </div>
+        </div>
+      </div>
 
     <script src="/libs/jquery-1.10.2.min.js"></script>  
     <script src="/socket.io/lib/socket.io.js"></script>
+
     <script>
         Number.prototype.toRad = function() {
            return this * Math.PI / 180;
@@ -514,10 +523,41 @@
 
 
     </script>  
-      <article id="compassHousing">
-      <canvas id="compassFace"></canvas>
-      <canvas id="compassNeedle"></canvas>
-    </article>
+      <article id="compassHousing" class="hide">
+        <canvas id="compassFace"></canvas>
+        <canvas id="compassNeedle"></canvas>
+      </article>
+
+      <script type="text/javascript">
+    dynamicSize();
+    
+    //Dynamic Sizing
+    function dynamicSize(){
+      var deviceWid = $(window).width();
+      var buttonWid = $("#nav-drop").height();
+      var navHeight = $("#header").height();
+      $("#nav-drop").width(buttonWid);
+
+      $("#content").css("top", navHeight + "px");
+
+      $("#brand").css("font-size",((3*navHeight)/4) +"px");
+      $("#brand").css("padding", ((3*navHeight)/8)+"px");
+    }
+
+    $("#btn-init").click(function(){
+      $("#btn-init").addClass("hide");
+      $("#btn-stop").removeClass("hide");
+      $("#information").removeClass("hide");
+      $("#compassHousing").removeClass("hide");
+    })
+
+    $("#btn-stop").click(function(){
+      $("#content").html("<h2>You've lost the trail!</h2></br><p>Get a new link to help you find it again.</p>");
+      $("#compassHousing").addClass("hide");
+    })
+
+
+    </script>
 
 	</body>
 </html>
